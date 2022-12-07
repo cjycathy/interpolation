@@ -2,7 +2,7 @@ import math
 from tqdm import tqdm
 import multiprocess
 
-class MultiprocessingUtils:
+class Multiprocessing:
     """
     Processes dataset with function parameter in multiprocess
 

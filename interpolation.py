@@ -3,7 +3,7 @@ import pandas as pd
 from osgeo import gdal, ogr
 from math import radians, cos, sin, asin, sqrt, ceil
 import time
-from multiprocessingUtils import MultiprocessingUtils
+from multiprocessingUtils import Multiprocessing
 
 class IdwInterpolation:
     """
@@ -149,7 +149,7 @@ class IdwInterpolation:
         result_list = []
         interpolate_df = pd.DataFrame(interpolate_np)
 
-        m = MultiprocessingUtils(interpolate_df, self.process_count, self.process_idw_by_row)
+        m = Multiprocessing(interpolate_df, self.process_count, self.process_idw_by_row)
         result_list = m.run('raster')
         result_list_reverse = np.asarray(result_list)[::-1]
         # self.process_idw_by_df(interpolate_df)
@@ -324,22 +324,3 @@ class IdwInterpolation:
         outband.WriteArray(data_grid)
         data_source = None
 
-
-
-if __name__ == "__main__":
-    startTime = time.time()
-    # path_point_xls='data/data_points.xls'
-    # shp_file = r'E:\pyqgis\heatmap\data0928_test\point\point_4490_370200.shp'
-    # extent_file = "E:/pyqgis/heatmap/area/id_370200.shp"
-    shp_file = r'E:\pyqgis\pyQgisProcessingThemeMap\module\interpolation\sample\sample_point.shp'
-    extent_file = r"E:\pyqgis\pyQgisProcessingThemeMap\module\interpolation\sample\extent.shp"
-    output_tiff = r'E:\pyqgis\pyQgisProcessingThemeMap\module\interpolation\sample\sample.tiff'
-    # shp_file = r'E:\pyqgis\heatmap\data0930\point\point_4490_500100_2.shp'
-    # extent_file = "E:/pyqgis/heatmap/area/id_500100.shp"
-    # output_tiff = r'E:\pyqgis\heatmap\data0930\500100_2.tif'
-    # IdwInterpolation = IdwInterpolation(0.001, 0.1, 12)
-    IdwInterpolation = IdwInterpolation(shp_file, extent_file, 0.0005, 0.005, 12, 'value', 12)
-    # IdwInterpolation.processInterpolation(output_tiff)
-    IdwInterpolation.generate_tiff(output_tiff)
-    endTime = time.time()
-    print("******************processing time: ", endTime-startTime, "s******************")
